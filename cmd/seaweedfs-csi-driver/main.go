@@ -78,6 +78,7 @@ func main() {
 
 	glog.Infof("connect to filer %s", *filer)
 
+	// 创建一个 CSI 驱动实例
 	drv := driver.NewSeaweedFsDriver(*driverName, *filer, *nodeID, *endpoint, *enableAttacher)
 
 	drv.RunNode = runNode
@@ -90,7 +91,7 @@ func main() {
 	drv.GidMap = *gidMap
 	drv.DataCenter = *dataCenter
 	drv.DataLocality = dataLocality
-
+	// 监听并处理来自 Kubernetes 的 CSI 请求
 	drv.Run()
 }
 

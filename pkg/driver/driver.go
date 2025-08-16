@@ -63,13 +63,15 @@ func NewSeaweedFsDriver(name, filer, nodeID, endpoint string, enableAttacher boo
 		grpcDialOption: security.LoadClientTLS(util.GetViper(), "grpc.client"),
 		signature:      util.RandomInt32(),
 	}
-
+	// 添加支持的卷访问模式
 	n.AddVolumeCapabilityAccessModes([]csi.VolumeCapability_AccessMode_Mode{
 		csi.VolumeCapability_AccessMode_MULTI_NODE_MULTI_WRITER,
 		csi.VolumeCapability_AccessMode_SINGLE_NODE_WRITER,
 		csi.VolumeCapability_AccessMode_SINGLE_NODE_MULTI_WRITER,
 		csi.VolumeCapability_AccessMode_SINGLE_NODE_SINGLE_WRITER,
 	})
+
+	// 添加支持的控制器服务能力
 	n.AddControllerServiceCapabilities([]csi.ControllerServiceCapability_RPC_Type{
 		csi.ControllerServiceCapability_RPC_CREATE_DELETE_VOLUME,
 		csi.ControllerServiceCapability_RPC_SINGLE_NODE_MULTI_WRITER,
@@ -86,6 +88,7 @@ func NewSeaweedFsDriver(name, filer, nodeID, endpoint string, enableAttacher boo
 	return n
 }
 
+// 设置和启动 CSI gRPC 服务器
 func (n *SeaweedFsDriver) Run() {
 	glog.Info("starting")
 
